@@ -19,101 +19,76 @@ class MainActivity : AppCompatActivity() {
 
     val registrationSocket: DatagramSocket = DatagramSocket(5555)
     val playtimeSocket = DatagramSocket(5554)
-    var playerName: String = ""
-    var serverIP: InetAddress? = null
-    var playerId: Int? = null
-    var playerGoals: String = ""
+    var playerId: Int = -1
 
     val TAG = "MyActivity"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        Log.i(TAG, "Entered Activity")
 
     }
 
-    fun register(){
+    fun register(ipAddr: Inet4Address, name: String): MutableList<String>{
+
+        val result: MutableList<String> = mutableListOf()
+
         doAsync {
-            Log.i(TAG,  "This works")
-            val mPacket = DatagramPacket(playerName.toByteArray(), playerName.toByteArray().size)
-            mPacket.address = serverIP
+            Log.i(TAG,  "Start Registering")
+            val mPacket = DatagramPacket(name.toByteArray(), name.toByteArray().size)
+            mPacket.address = ipAddr
             mPacket.port = 6665
             registrationSocket.send(mPacket)
+            Log.i(TAG, "Registration packet sent")
             val receivedBytes = ByteArray(128)
             val receivePacket = DatagramPacket(receivedBytes, receivedBytes.size)
             registrationSocket.receive(receivePacket)
-            Log.i(TAG, "go packet")
+            Log.i(TAG, "Got packet")
             val byteStream = ByteArrayInputStream(receivePacket.data)
             val receivedStream = DataInputStream(byteStream)
             playerId = receivedStream.readInt()
+            Log.i(TAG, "Assigned with id $playerId")
 
             val goalBytes = ByteArray(512)
             try {
                 receivedStream.readFully(goalBytes)
             } catch (e: EOFException){}
-            playerGoals = String(goalBytes)
+            val playerGoals = String(goalBytes)
+
+            Log.i(TAG, "Player goals read")
+
+            result.addAll(playerGoals.split('\n'))
 
             uiThread {
                 findViewById<TextView>(R.id.idTextView).text = playerId.toString()
                 findViewById<TextView>(R.id.goalTextView).text = playerGoals
                 longToast("Registered with id $playerId with goals $playerGoals")
             }
-
         }
+
+
+        return result
     }
 
-    fun registerButton(view: View){
-        val ipString = findViewById<EditText>(R.id.ipTextEdit).text.toString()
-        val resultIP = Inet4Address.getByName(ipString)
-        serverIP = resultIP
-        playerName = findViewById<EditText>(R.id.nameTextEdit).text.toString()
 
-        register()
-    }
-
-    fun sendMovement(view: View){
+    fun sendMovement(ipAddr: Inet4Address, direction: Int){
         doAsync {
-            val direction = view.tag.toString().toInt()
 
             val byteOut = ByteArrayOutputStream()
             val dataOut = DataOutputStream(byteOut)
 
-            dataOut.writeInt(playerId!!)
+            dataOut.writeInt(playerId)
             dataOut.writeInt(direction)
 
             val bytes = byteOut.toByteArray()
 
             val mPacket = DatagramPacket(bytes, bytes.size)
-            mPacket.address = serverIP
+            Log.i(TAG, "Packet with direction $direction sent")
+            mPacket.address = ipAddr
             mPacket.port = 6666
 
             playtimeSocket.send(mPacket)
         }
     }
 
-    fun sendPacket(view: View) {
-        doAsync {
-            val message = "Testowa wiadomość".toByteArray()
-            val mPacket: DatagramPacket = DatagramPacket(message, message.size)
-            mPacket.port = 6666
-            val remoteAddress = Inet4Address.getByName("192.168.1.55")
-            mPacket.address = remoteAddress
-            registrationSocket.send(mPacket)
-            uiThread {
-                toast("Wysłane")
-            }
-            val receiveArray = ByteArray(128)
-            val receivePacket = DatagramPacket(receiveArray, receiveArray.size)
-            registrationSocket.receive(receivePacket)
-            val recdata = receivePacket.data
-            val resultString = String(recdata)
-
-            uiThread {
-                toast(resultString)
-            }
-        }
-
-
-    }
 }

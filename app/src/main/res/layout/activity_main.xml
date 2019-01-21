@@ -7,34 +7,11 @@
         android:layout_height="match_parent"
         tools:context=".MainActivity">
 
-    <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:inputType="textPersonName"
-            android:text="@string/ipplaceholder"
-            android:ems="10"
-            android:id="@+id/ipTextEdit" android:layout_marginStart="8dp"
-            app:layout_constraintStart_toStartOf="parent" android:layout_marginTop="8dp"
-            app:layout_constraintTop_toTopOf="parent"/>
-    <Button
-            android:text="@string/ipconfirm"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/ipConfirm"
-            android:layout_marginTop="8dp"
-            app:layout_constraintTop_toBottomOf="@+id/nameTextEdit" app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="8dp" android:onClick="registerButton"/>
-    <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/idTextView" app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp" app:layout_constraintTop_toBottomOf="@+id/ipConfirm"/>
-
     <TextView
             android:text="TextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/goalTextView"
+            android:id="@+id/TextView1"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginEnd="8dp"
             app:layout_constraintStart_toStartOf="parent"
@@ -42,65 +19,5 @@
             app:layout_constraintHorizontal_bias="0.498"
             android:layout_marginTop="260dp"
             app:layout_constraintTop_toTopOf="parent"/>
-    <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:inputType="textPersonName"
-            android:text="Name"
-            android:ems="10"
-            android:id="@+id/nameTextEdit" android:layout_marginTop="8dp"
-            app:layout_constraintTop_toBottomOf="@+id/ipTextEdit" app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="8dp"/>
-    <Button
-            android:text="Button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/upButton" app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
-            android:tag="3"
-            android:onClick="sendMovement"
-            app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"
-            android:layout_marginTop="368dp" app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"/>
-
-    <Button
-            android:text="Button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/downButton"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginEnd="8dp"
-            android:tag="1"
-            android:onClick="sendMovement"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="164dp"
-            app:layout_constraintTop_toBottomOf="@+id/upButton"
-            app:layout_constraintHorizontal_bias="0.498"
-            android:layout_marginBottom="8dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintVertical_bias="0.189"/>
-    <Button
-            android:text="Button"
-            android:layout_width="wrap_content"
-            android:layout_height="50dp"
-            android:id="@+id/leftButton"
-            android:tag="2"
-            android:onClick="sendMovement"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="8dp" app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
-            app:layout_constraintHorizontal_bias="0.11" android:layout_marginTop="8dp"
-            app:layout_constraintTop_toBottomOf="@+id/upButton" android:layout_marginBottom="8dp"
-            app:layout_constraintBottom_toTopOf="@+id/downButton"/>
-    <Button
-            android:text="Button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/rightButton" app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
-            android:tag="0"
-            android:onClick="sendMovement"
-            app:layout_constraintStart_toEndOf="@+id/leftButton" android:layout_marginStart="8dp"
-            app:layout_constraintHorizontal_bias="0.739" android:layout_marginTop="8dp"
-            app:layout_constraintTop_toBottomOf="@+id/upButton" android:layout_marginBottom="8dp"
-            app:layout_constraintBottom_toTopOf="@+id/downButton"/>
 
 </android.support.constraint.ConstraintLayout>

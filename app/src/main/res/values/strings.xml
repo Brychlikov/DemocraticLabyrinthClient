@@ -1,5 +1,3 @@
 <resources>
     <string name="app_name">DemocraticLabyrinthClient</string>
-    <string name="ipconfirm">Confirm</string>
-    <string name="ipplaceholder">Adres IP</string>
 </resources>
