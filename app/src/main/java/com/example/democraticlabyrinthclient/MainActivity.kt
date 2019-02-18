@@ -25,28 +25,40 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         Log.i(TAG, "Entered Activity")
-
-        doAsync{
-            while(true){
-                val goalString = ""
-                for(g in mConnUtils.gameInfo.goals){
-                    goalString += "${g.shortDescription} \n"
-                }
-                findViewById<TextView>(R.id.Power_text).text = mConnUtils.gameInfo.power.toString()
-                var trapString = ""
-                for(t in mConnUtils.gameInfo.traps){
-                    trapString += "${t.position} \n"
-                }
-
-            }
-        }
-
+        mConnUtils.startAutoUpdate()
     }
 
     fun register_player(view: View){
-        val ip_string = findViewById<EditText>(R.id.ipTextEdit).toString()
-        val name = findViewById<EditText>(R.id.nameTextEdit).toString()
-        mConnUtils.register(name, ip_string)
+        val ip_string = findViewById<EditText>(R.id.ipTextEdit).text.toString()
+        val p_name: String = findViewById<EditText>(R.id.nameTextEdit).text.toString()
+        mConnUtils.register(p_name, ip_string)
+        startUpdating()
+    }
+
+    fun startUpdating(){
+
+        doAsync{
+            while(true){
+                if (!mConnUtils.infoSafe){
+                    continue
+                }
+                var goalString = ""
+                for(g in mConnUtils.gameInfo!!.goals){
+                    goalString += "${g.shortDescription}: ${g.progress}/${g.aim} \n"
+                }
+                var trapString = ""
+                for(t in mConnUtils.gameInfo!!.traps){
+                    trapString += "${t.position} \n"
+                }
+                uiThread {
+                    findViewById<TextView>(R.id.Trap_text).text = trapString
+                    findViewById<TextView>(R.id.goalTextView).text = goalString
+                    findViewById<TextView>(R.id.Power_text).text = mConnUtils.gameInfo!!.power.toString()
+                }
+
+                Thread.sleep(10)
+            }
+        }
     }
 
     fun sendRight(view: View) {

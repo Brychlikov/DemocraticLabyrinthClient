@@ -32,8 +32,8 @@
 
     <TextView
             android:text="TextView"
-            android:layout_width="127dp"
-            android:layout_height="61dp"
+            android:layout_width="223dp"
+            android:layout_height="98dp"
             android:id="@+id/goalTextView"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginEnd="8dp"

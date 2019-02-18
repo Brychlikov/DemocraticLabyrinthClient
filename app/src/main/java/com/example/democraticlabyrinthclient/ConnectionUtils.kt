@@ -1,4 +1,4 @@
-package com.example.democraticlabyrinthjavaclient
+package com.example.democraticlabyrinthclient
 
 import android.util.Log
 import com.beust.klaxon.*
@@ -6,6 +6,7 @@ import org.jetbrains.anko.doAsync
 import java.io.*
 import java.net.DatagramPacket
 import java.net.DatagramSocket
+import java.net.Inet4Address
 import java.net.InetAddress
 
 
@@ -84,6 +85,7 @@ class ConnectionUtils {
     var serverIP: InetAddress? = null
     var playerId: Int? = null
     var playerGoals: String = ""
+    var infoSafe: Boolean = false
 
     var gameInfo: GameInfo? = null
     val TAG = "ConnUtil"
@@ -91,8 +93,12 @@ class ConnectionUtils {
     fun register(name: String, ip: String) {
         Log.i(TAG, "Starting async")
         doAsync {
+            Log.i(TAG, "In async")
             val mPacket = DatagramPacket(name.toByteArray(), name.toByteArray().size)
-            mPacket.address = InetAddress.getByName(ip)
+            Log.i(TAG, "packet prepared")
+            Log.i(TAG, ip)
+            mPacket.address = Inet4Address.getByName(ip)
+            serverIP = Inet4Address.getByName(ip)
             mPacket.port = 6665
             Log.i(TAG, "sending registration packet")
             registrationSocket.send(mPacket)
@@ -105,6 +111,8 @@ class ConnectionUtils {
             val byteStream = ByteArrayInputStream(receivePacket.data)
             val receivedStream = DataInputStream(byteStream)
             playerId = receivedStream.readInt()
+
+            Log.i(TAG, "Got assigned id $playerId")
 
             val goalBytes = ByteArray(1024)
             try {
@@ -134,6 +142,9 @@ class ConnectionUtils {
                 gameInfo = Klaxon().converter(trapDataConverter).converter(goalDataConverter).parse<GameInfo>(resString)
                 Log.i(TAG, gameInfo!!.goals[0].shortDescription + gameInfo!!.color + gameInfo!!.name)
                 Log.i(TAG, "loop ended")
+                infoSafe = true
+
+                Thread.sleep(10)
             }
         }
     }
